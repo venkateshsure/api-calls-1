@@ -1,8 +1,8 @@
-GET http://localhost:3001/players/
+GET http://localhost:3000/players/
 
 ###
-POST http://localhost:3001/players/
-Content-Type:applicaton/json
+POST http://localhost:3000/players/
+Content-Type:application/json
 
 {
   "playerName": "Vishal",
@@ -11,10 +11,10 @@ Content-Type:applicaton/json
 }
 
 ###
-GET http://localhost:3001/players/1/
+GET http://localhost:3000/players/2/
 
 ###
-PUT http://locallost:3001/players/1/
+PUT http://localhost:3000/players/1/
 Content-Type:application/json
 
 {
@@ -24,4 +24,4 @@ Content-Type:application/json
 }
 
 ###
-DELETE http://localhost:3001/players/1/
+DELETE http://localhost:3000/players/1/

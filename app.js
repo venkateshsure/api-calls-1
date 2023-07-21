@@ -19,7 +19,7 @@ const dbServerWithNode = async () => {
       filename: databasePath,
       driver: sqlite3.Database,
     });
-    app.listen(3001, () => {
+    app.listen(3000, () => {
       console.log("hii");
     });
   } catch (e) {
@@ -39,19 +39,20 @@ app.get("/players/", async (req, res) => {
 
 //post api call
 app.post("/players/", async (req, res) => {
-  //const playerId = req.params;
   const dataBody = req.body;
-  //console.log(body);
+
   let { playerName, jerseyNumber, role } = dataBody;
-  let query = `
+  try {
+    let query = `
          INSERT INTO 
          cricket_team(player_name,jersey_number,role)
          values('${playerName}',${jerseyNumber},'${role}');`;
-  let promiseObj = await db.run(query);
-  //let playerId = promiseObj.lastID;
-  res.send("Player Added to Team");
-  //console.log(playerName);
-  //res.send(dataBody);
+    let promiseObj = await db.run(query);
+    //let playerId = promiseObj.lastID;
+    res.send("Player Added to Team");
+  } catch (e) {
+    console.log(e.code);
+  }
 });
 
 //get api call
@@ -73,8 +74,8 @@ app.put("/players/:playerId/", async (req, res) => {
   const { playerName, jerseyNumber, role } = dbBody;
   let query = `
           UPDATE cricket_team SET
-          player_name='${player_name}',
-          jersey_number=${jersey_number},
+          player_name='${playerName}',
+          jersey_number=${jerseyNumber},
            role='${role}'
            WHERE player_id=${playerId};`;
   let dbPromise = await db.run(query);
