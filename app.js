@@ -37,6 +37,7 @@ app.get("/players/", async (req, res) => {
   res.send(dataBase);
 });
 
+//post api call
 app.post("/players/", async (req, res) => {
   //const playerId = req.params;
   const dataBody = req.body;
@@ -50,5 +51,45 @@ app.post("/players/", async (req, res) => {
   //let playerId = promiseObj.lastID;
   res.send("Player Added to Team");
   //console.log(playerName);
-  res.send(dataBody);
+  //res.send(dataBody);
 });
+
+//get api call
+
+app.get("/players/:playerId/", async (req, res) => {
+  const { playerId } = req.params;
+  const query = `
+           SELECT * FROM cricket_team
+           WHERE player_id=${playerId};`;
+  const dbResponse = await db.get(query);
+  res.send(dbResponse);
+});
+
+//update api call
+
+app.put("/players/:playerId/", async (req, res) => {
+  const { playerId } = req.params;
+  const dbBody = req.body;
+  const { playerName, jerseyNumber, role } = dbBody;
+  let query = `
+          UPDATE cricket_team SET
+          player_name='${player_name}',
+          jersey_number=${jersey_number},
+           role='${role}'
+           WHERE player_id=${playerId};`;
+  let dbPromise = await db.run(query);
+  res.send("Player Details Updated");
+});
+
+//delete api call
+
+app.delete("/players/:playerId/", async (req, res) => {
+  const { playerId } = req.params;
+  let query = `
+        SELECT * FROM cricket_team
+          WHERE player_id=${playerId};`;
+  const dbRes = await db.run(query);
+  res.send("Player Removed");
+});
+
+module.exports = app;
