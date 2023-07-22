@@ -30,11 +30,24 @@ const dbServerWithNode = async () => {
 
 dbServerWithNode();
 
+const convertDbObjToResObj = (eachObj) => {
+  return {
+    playerId: eachObj.player_id,
+    playerName: eachObj.player_name,
+    jerseyNumber: eachObj.jersey_number,
+    role: eachObj.role,
+  };
+};
+
+//let response = null;
 app.get("/players/", async (req, res) => {
   let query = `
         SELECT * FROM cricket_team;`;
   const dataBase = await db.all(query);
-  res.send(dataBase);
+
+  let response = dataBase.map((eachObj) => convertDbObjToResObj(eachObj));
+
+  res.send(response);
 });
 
 //post api call
@@ -63,7 +76,9 @@ app.get("/players/:playerId/", async (req, res) => {
            SELECT * FROM cricket_team
            WHERE player_id=${playerId};`;
   const dbResponse = await db.get(query);
-  res.send(dbResponse);
+
+  let response = convertDbObjToResObj(dbResponse); //dbResponse.map((eachObj) => convertDbObjToResObj(eachObj));
+  res.send(response);
 });
 
 //update api call
@@ -87,7 +102,7 @@ app.put("/players/:playerId/", async (req, res) => {
 app.delete("/players/:playerId/", async (req, res) => {
   const { playerId } = req.params;
   let query = `
-        SELECT * FROM cricket_team
+        DELETE FROM cricket_team
           WHERE player_id=${playerId};`;
   const dbRes = await db.run(query);
   res.send("Player Removed");
